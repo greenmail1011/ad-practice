@@ -58,10 +58,14 @@ var PEOPLE = [
     sections: [
       { title: "一維簡單（陣列、迴圈、條件判斷）", items: [
         { id:"q367", t:"2. 木桶問題", tags:["迴圈"], rate:"99%", note:"讀入 N 個數字，找最小值。" },
+        { id:"j224", t:"寶可夢圖鑑", tags:["計數"], rate:"98%", note:"算出一共有幾種不同的編號。" },
         { id:"b764", t:"P32編碼", tags:["字串處理","迴圈","陣列"], rate:"98%", note:"照規則逐字處理並輸出。" },
+        { id:"f073", t:"切牌", tags:["陣列"], rate:"97%", note:"依切牌數量，把前面的牌移到後面再輸出。" },
+        { id:"d046", t:"文文採西瓜", tags:["迴圈"], rate:"97%", note:"數有幾顆西瓜不超過 10 公斤。" },
         { id:"b993", t:"計算最高史萊姆擊殺分數!", tags:["if","迴圈"], rate:"93%", note:"找最大值，注意題目要求重複輸入資料。" },
         { id:"g307", t:"pA. 為了好吃的蘋果派", tags:["迴圈"], rate:"93%", note:"去掉最高、最低分再算平均。" },
         { id:"d573", t:"CRC騎士團", tags:["陣列"], rate:"92%", note:"把名單存進陣列，再依編號查詢。" },
+        { id:"e529", t:"00482 - Permutation Arrays", tags:["陣列"], rate:"92%", note:"依索引陣列重排資料，注意多組測資。" },
         { id:"c638", t:"天干地支", tags:["number","陣列","餘數"], rate:"91%", note:"把名稱放進陣列，用餘數取出對應項目。" }
       ]},
       { title: "二維簡單（尚未做過）", items: [
@@ -80,18 +84,35 @@ var PEOPLE = [
     sections: [
       { title: "一維簡單（陣列、迴圈、條件判斷）", items: [
         { id:"q367", t:"2. 木桶問題", tags:["迴圈"], rate:"99%", note:"讀入 N 個數字，找最小值。" },
+        { id:"j224", t:"寶可夢圖鑑", tags:["計數"], rate:"98%", note:"算出一共有幾種不同的編號。" },
         { id:"b764", t:"P32編碼", tags:["字串處理","迴圈","陣列"], rate:"98%", note:"照規則逐字處理並輸出。" },
+        { id:"f073", t:"切牌", tags:["陣列"], rate:"97%", note:"依切牌數量，把前面的牌移到後面再輸出。" },
         { id:"b993", t:"計算最高史萊姆擊殺分數!", tags:["if","迴圈"], rate:"93%", note:"找最大值，注意題目要求重複輸入資料。" },
         { id:"g307", t:"pA. 為了好吃的蘋果派", tags:["迴圈"], rate:"93%", note:"去掉最高、最低分再算平均。" },
         { id:"d573", t:"CRC騎士團", tags:["陣列"], rate:"92%", note:"把名單存進陣列，再依編號查詢。" },
         { id:"e529", t:"00482 - Permutation Arrays", tags:["陣列"], rate:"92%", note:"依索引陣列重排資料，注意多組測資。" },
         { id:"c638", t:"天干地支", tags:["number","陣列","餘數"], rate:"91%", note:"把名稱放進陣列，用餘數取出對應項目。" },
         { id:"b753", t:"P31以身分證投票之檢查", tags:["字串處理","迴圈","陣列"], rate:"89%", note:"逐字元檢查規則，條件判斷要完整。" },
-        { id:"d166", t:"反轉表", tags:["陣列"], rate:"88%", note:"雙層迴圈就能做，想清楚每個位置要數什麼。", stretch:true }
+        { id:"d166", t:"反轉表", tags:["陣列"], rate:"88%", note:"雙層迴圈就能做，想清楚每個位置要數什麼。",stretch:true }
       ]}
     ]
   }
 ];
+
+// 打勾紀錄的雲端試算表接口（Google Apps Script 網頁應用程式網址）。留空則只存在本機瀏覽器。
+var SHEET_ENDPOINT = "";
+
+function report(person, it, checked){
+  if (!SHEET_ENDPOINT) { return; }
+  try {
+    fetch(SHEET_ENDPOINT, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ student: person.name, problem: it.id, title: it.t, done: checked, time: new Date().toISOString() })
+    });
+  } catch(e) {}
+}
 
 function load(k){ try { return JSON.parse(localStorage.getItem(k) || "{}"); } catch(e){ return {}; } }
 function save(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
@@ -141,6 +162,7 @@ PEOPLE.forEach(function(p, idx){
         if (cb.checked) { done[it.id] = 1; } else { delete done[it.id]; }
         row.classList.toggle("done", cb.checked);
         save("ad-" + p.key, done);
+        report(p, it, cb.checked);
         updateProgress();
       };
       var body = document.createElement("div");

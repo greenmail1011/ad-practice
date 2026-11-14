@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AD 客製練習題｜張皓泊・陳正軒</title>
+<style>
+  :root { --bg:#f6f7fb; --card:#fff; --ink:#1f2433; --mute:#6b7280; --line:#e5e7eb; --accent:#2563eb; --ok:#16a34a; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; background:var(--bg); color:var(--ink); line-height:1.6; }
+  header { padding:28px 20px 8px; max-width:900px; margin:0 auto; }
+  h1 { margin:0 0 4px; font-size:1.5rem; }
+  .sub { color:var(--mute); font-size:.9rem; }
+  .tabs { max-width:900px; margin:16px auto 0; padding:0 20px; display:flex; gap:8px; }
+  .tab { flex:1; padding:10px 12px; border:1px solid var(--line); background:var(--card); border-radius:10px; cursor:pointer; font-size:1rem; text-align:center; }
+  .tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  main { max-width:900px; margin:12px auto 48px; padding:0 20px; }
+  .panel { display:none; }
+  .panel.active { display:block; }
+  .intro { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin-bottom:14px; font-size:.95rem; }
+  .intro a { color:var(--accent); }
+  h2 { font-size:1.05rem; margin:20px 0 8px; }
+  .item { display:flex; gap:12px; align-items:flex-start; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px 14px; margin-bottom:8px; }
+  .item.done { opacity:.55; }
+  .item input { margin-top:6px; width:18px; height:18px; accent-color:var(--ok); }
+  .body { flex:1; min-width:0; }
+  .title a { color:var(--ink); font-weight:600; text-decoration:none; }
+  .title a:hover { color:var(--accent); text-decoration:underline; }
+  .pid { color:var(--accent); font-family:ui-monospace,Menlo,monospace; margin-right:6px; }
+  .meta { color:var(--mute); font-size:.85rem; margin-top:2px; }
+  .tag { display:inline-block; background:#eef2ff; color:#3730a3; border-radius:999px; padding:0 8px; margin-right:4px; font-size:.78rem; }
+  .note { font-size:.88rem; margin-top:4px; }
+  .stretch { border-color:#f59e0b; }
+  .badge { background:#fef3c7; color:#92400e; border-radius:6px; padding:0 6px; font-size:.75rem; margin-left:6px; }
+  .progress { color:var(--mute); font-size:.85rem; margin:0 0 8px; }
+  footer { text-align:center; color:var(--mute); font-size:.8rem; padding:0 20px 32px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>AD 客製練習題</h1>
+  <div class="sub">依 ZeroJudge 解題紀錄挑選，皆為兩人尚未通過（AC）的題目｜資料日期 2026-11-14</div>
+</header>
+
+<div class="tabs" id="tabs"></div>
+<main id="main"></main>
+<footer>題目連結皆指向 zerojudge.tw；勾選進度只存在這台裝置的瀏覽器。</footer>
+
+<script>
+var BASE = "https://zerojudge.tw/ShowProblem?problemid=";
+
+var PEOPLE = [
+  {
+    key: "zhang",
+    name: "張皓泊",
+    uid: 215351,
+    intro: "已 AC 205 題。適合：一維進階題，或 ZeroJudge 上尚未做過的二維簡單題。",
+    sections: [
+      { title: "一維進階（前綴和／掃描線／貪心／區間 DP）", items: [
+        { id:"d438", t:"10533 - Digit Primes", tags:["區間問題","質數"], rate:"79%", note:"先建質數表，再用前綴和回答區間詢問。" },
+        { id:"k648", t:"教室配置 (Classroom)", tags:["掃描線"], rate:"76%", note:"事件排序後掃描，注意同一時間點的處理順序。" },
+        { id:"k714", t:"外送接單 (Delivery)", tags:["Greedy"], rate:"78%", note:"想清楚排序依據，再證明貪心成立。" },
+        { id:"a164", t:"區間最大連續和", tags:["DP","區間"], rate:"60%", note:"最大子陣列和，一維 DP 的代表題。", stretch:true }
+      ]},
+      { title: "二維簡單（尚未做過）", items: [
+        { id:"k554", t:"地雷很危險", tags:["二維陣列","基礎題"], rate:"93%", note:"八方向計數，熟悉邊界判斷。" },
+        { id:"n136", t:"p8. 賓果遊戲", tags:["二維陣列"], rate:"96%", note:"二維陣列掃描列、行、對角線。" },
+        { id:"q366", t:"1. 十字轟炸", tags:["二維陣列"], rate:"81%", note:"十字方向的區域標記與累計。" },
+        { id:"k514", t:"P2.解藥 (Medicine)", tags:["二維","陣列"], rate:"94%", note:"二維陣列模擬。" }
+      ]}
+    ]
+  },
+  {
+    key: "chen",
+    name: "陳正軒",
+    uid: 256792,
+    intro: "已 AC 216 題。適合：一維較深入的題目。",
+    sections: [
+      { title: "一維進階（由易到難）", items: [
+        { id:"d244", t:"一堆石頭", tags:["陣列"], rate:"78%", note:"暖身：先求平均，再計算搬動次數。" },
+        { id:"d438", t:"10533 - Digit Primes", tags:["區間問題","質數"], rate:"79%", note:"先建質數表，再用前綴和回答區間詢問。" },
+        { id:"k648", t:"教室配置 (Classroom)", tags:["掃描線"], rate:"76%", note:"事件排序後掃描，注意同一時間點的處理順序。" },
+        { id:"k714", t:"外送接單 (Delivery)", tags:["Greedy"], rate:"78%", note:"想清楚排序依據，再證明貪心成立。" },
+        { id:"a164", t:"區間最大連續和", tags:["DP","區間"], rate:"60%", note:"最大子陣列和，一維 DP 的代表題。" },
+        { id:"d242", t:"00481 - What Goes Up", tags:["DP","LIS","最長遞增子序列"], rate:"79%", note:"LIS，N 大時需要 O(N log N) 做法。" },
+        { id:"e841", t:"P8. 幽靈寶藏 (Treasure)", tags:["greedy","掃描線","延遲標記"], rate:"60%", note:"差分陣列＋貪心，想想為什麼不用逐格更新。", stretch:true },
+        { id:"f174", t:"m6a2-蛋糕 (Cake)", tags:["前綴和","單調隊列"], rate:"70%", note:"前綴和搭配單調隊列。", stretch:true }
+      ]}
+    ]
+  }
+];
+
+function load(k){ try { return JSON.parse(localStorage.getItem(k) || "{}"); } catch(e){ return {}; } }
+function save(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+
+var tabs = document.getElementById("tabs");
+var main = document.getElementById("main");
+
+PEOPLE.forEach(function(p, idx){
+  var done = load("ad-" + p.key);
+
+  var tab = document.createElement("button");
+  tab.className = "tab" + (idx === 0 ? " active" : "");
+  tab.textContent = p.name;
+  tab.onclick = function(){
+    document.querySelectorAll(".tab").forEach(function(t){ t.classList.remove("active"); });
+    document.querySelectorAll(".panel").forEach(function(t){ t.classList.remove("active"); });
+    tab.classList.add("active");
+    panel.classList.add("active");
+  };
+  tabs.appendChild(tab);
+
+  var panel = document.createElement("section");
+  panel.className = "panel" + (idx === 0 ? " active" : "");
+
+  var intro = document.createElement("div");
+  intro.className = "intro";
+  intro.innerHTML = p.intro + ' <a href="https://zerojudge.tw/UserStatistic?id=' + p.uid + '" target="_blank" rel="noopener">解題統計</a>';
+  panel.appendChild(intro);
+
+  var prog = document.createElement("div");
+  prog.className = "progress";
+  panel.appendChild(prog);
+
+  var total = 0;
+  p.sections.forEach(function(s){
+    var h = document.createElement("h2");
+    h.textContent = s.title;
+    panel.appendChild(h);
+    s.items.forEach(function(it){
+      total++;
+      var row = document.createElement("div");
+      row.className = "item" + (it.stretch ? " stretch" : "") + (done[it.id] ? " done" : "");
+      var cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.checked = !!done[it.id];
+      cb.onchange = function(){
+        if (cb.checked) { done[it.id] = 1; } else { delete done[it.id]; }
+        row.classList.toggle("done", cb.checked);
+        save("ad-" + p.key, done);
+        updateProgress();
+      };
+      var body = document.createElement("div");
+      body.className = "body";
+      var tags = it.tags.map(function(t){ return '<span class="tag">' + t + '</span>'; }).join("");
+      body.innerHTML =
+        '<div class="title"><span class="pid">' + it.id + '</span>' +
+        '<a href="' + BASE + it.id + '" target="_blank" rel="noopener">' + it.t + '</a>' +
+        (it.stretch ? '<span class="badge">挑戰</span>' : '') + '</div>' +
+        '<div class="meta">' + tags + '全站通過率 ' + it.rate + '</div>' +
+        '<div class="note">' + it.note + '</div>';
+      row.appendChild(cb);
+      row.appendChild(body);
+      panel.appendChild(row);
+    });
+  });
+
+  function updateProgress(){
+    prog.textContent = "進度 " + Object.keys(done).length + " / " + total;
+  }
+  updateProgress();
+  main.appendChild(panel);
+});
+</script>
+</body>
+</html>

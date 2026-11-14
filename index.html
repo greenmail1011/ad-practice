@@ -100,7 +100,7 @@ var PEOPLE = [
 ];
 
 // 打勾紀錄的雲端試算表接口（Google Apps Script 網頁應用程式網址）。留空則只存在本機瀏覽器。
-var SHEET_ENDPOINT = "";
+var SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbxB0Zb4tQAGyuSXCvF-dIb3s638a0eQIczAhHiiK9y7_tEp3D8CmNJGnysNhMbMT3_Hzw/exec";
 
 function report(person, it, checked){
   if (!SHEET_ENDPOINT) { return; }
